@@ -27,7 +27,7 @@ def opiskelijanumeroOk(opiskelijanumero: str) -> bool:
             result = True
     return result
 
-# TODO: Tee testit HeTu:a varten ja vasta sitten kirjoita koodi
+
 
 # Henkilötunnus esimerkki 130728-478N testataan
 # 1. Pituus
@@ -42,8 +42,42 @@ def checkHeTu(hetu):
     # Oletustulos 0 OK jos kaikki on kunnossa
     result = (0, 'OK')
 
+    # Vuosisatakoodien sanakirja
+    centuryCode = {
+        '+': 1800,
+        '-': 1900,
+        'A': 2000
+    }
+
+    validCenturyCode = centuryCode.keys()
+
     # Lasketaan HeTu-parametrin pituus
     length = len(hetu)
+
+    # Sanakirja, jossa on jakojäännösten kirjaintunnukset
+    modulusSymbols = {
+        10: 'A',
+        11: 'B',
+        12: 'C',
+        13: 'D',
+        14: 'E',
+        15: 'F',
+        16: 'H',
+        17: 'J',
+        18: 'K',
+        19: 'L',
+        20: 'M',
+        21: 'N',
+        22: 'P',
+        23: 'R',
+        24: 'S',
+        25: 'T',
+        26: 'U',
+        27: 'V',
+        28: 'W',
+        29: 'X',
+        30: 'Y'
+    }
 
     # Jos pituus oikea tehdään eri osat
     if length == 11:
@@ -64,9 +98,31 @@ def checkHeTu(hetu):
             if day > 31:
                 result = (3, 'Päivä virheellinen')
         else:
-            # Jo muuta kuin pelkkiä numeroita
+            # Jos muuta kuin pelkkiä numeroita
             result = (3, 'Päivä virheellinen')
-            
+
+        # Tarkistetaan kuukausiosan oikeellisuus, pitää olla pelkkiä numeroita
+        if monthPart.isdigit():
+            month = int(monthPart)
+
+            # Kuukauden pitää olla väliltä 1 - 12
+            if month < 1:
+                result = (4, 'Kuukausi virheellinen')
+            if month > 12:
+                result = (4, 'Kuukausi virheellinen')
+        else:
+            # Jos muuta kuin pelkkiä numeroita
+            result = (4, 'Kuukausi virheellinen')
+        
+        #Tarkistetaan vuosiosan oikeellisuus, pitää olla pelkkiä numeroita
+        if yearPart.isdigit():
+            year = int(yearPart)
+        else:
+            result = (5, "Vuosi virheellinen")
+
+        # TODO: TÄhän Try-Except, jolla tarkistetaan vuosisatakoodi
+
+        # TODO: Tähän moudol 31 tarkistetaan laskenta ha vertaus syötettynä
 
     if length < 11:
         result = (1, 'Henkiötunnus liian lyhyt')
@@ -80,5 +136,31 @@ if __name__ == "__main__":
     hetu = '130728-478N'
     paiva = hetu[0:2]
     kuukaudet = hetu[2:4]
-    print(paiva)
-    print(kuukaudet)
+    #print(paiva)
+    #print(kuukaudet)
+
+    # Vuosisatakoodien sanakirja
+    centuryCode = {
+        '+': 1800,
+        '-': 1900,
+        'A': 2000
+    }
+
+    validCenturyCode = list(centuryCode.keys())
+    print(validCenturyCode)
+
+    # Haetaan vuosisata aviamen perusteella
+    print('Vuosisatakoodi - on ', centuryCode['-'])
+
+    # Vuosisatakoodien avaimet listana
+    print('Sallitut vuosisatakoodit ovat', validCenturyCode)
+
+    # Haetaan olemattomalla avaimella
+    #print('Vuosisatakood * on ', centuryCode['*'])
+
+    # Haetaan indeksinumero listan jäsenelle
+    try:
+        position = validCenturyCode.index('*')
+        print(position)
+    except:
+        print('Ei löytynyt')
