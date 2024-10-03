@@ -147,7 +147,9 @@ if __name__ == "__main__":
     }
 
     validCenturyCode = list(centuryCode.keys())
-    print(validCenturyCode)
+    validCC = [*centuryCode.keys()]
+    print('Hassu tapa', validCC)
+    print('Listafunktiolla', validCenturyCode)
 
     # Haetaan vuosisata aviamen perusteella
     print('Vuosisatakoodi - on ', centuryCode['-'])
