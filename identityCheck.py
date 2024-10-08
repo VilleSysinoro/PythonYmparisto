@@ -136,7 +136,7 @@ def checkHeTu(hetu):
         except:
             result = (6, 'Vuosisatakoodi virheellinen')
 
-        # TODO: Tähän moudulo 31 tarkistetaan laskenta ja vertaus syötettynä
+        # Lasketaan modulo 31 tarkiste ja verrataan sitä syötetyn HeTu:n tarkisteeseen
         partsCombined = dayPart + monthPart + yearPart + numberPart
 
         if partsCombined.isdigit() and result == (0, 'OK'):
@@ -156,48 +156,4 @@ def checkHeTu(hetu):
 # KOKEILLAAN ERILAISIA VAIHTOEHTOJA
 # ---------------------------------
 if __name__ == "__main__":
-    hetu = '130728-478N'
-    paiva = hetu[0:2]
-    kuukaudet = hetu[2:4]
-    # print(paiva)
-    # print(kuukaudet)
-
-    # Vuosisatakoodien sanakirja
-    centuryCode = {
-        '+': 1800,
-        '-': 1900,
-        'A': 2000
-    }
-
-    validCenturyCode = list(centuryCode.keys())
-    validCC = [*centuryCode.keys()]
-    print('Hassu tapa', validCC)
-    print('Listafunktiolla', validCenturyCode)
-
-    # Haetaan vuosisata aviamen perusteella
-    print('Vuosisatakoodi - on ', centuryCode['-'])
-
-    # Vuosisatakoodien avaimet listana
-    print('Sallitut vuosisatakoodit ovat', validCenturyCode)
-
-    # Haetaan olemattomalla avaimella
-    # print('Vuosisatakood * on ', centuryCode['*'])
-
-    # Haetaan indeksinumero listan jäsenelle
-    try:
-        position = validCenturyCode.index('*')
-    except Exception as e:
-        print('Tapahtui virhe:', e)
-
-    print('Ja tämä tulee virheenkäsittelyn jälkeen näkyviin')
-
-    searchLetter = '+'
-
-    for value in validCenturyCode:
-        if value == searchLetter:
-            found = True
-            break
-        else:
-            found = False
-    if found == False:
-        print('Ei löytynyt')
+    pass
