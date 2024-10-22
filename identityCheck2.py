@@ -48,7 +48,7 @@ class NationalSSN:
         Returns:
             dict: parts as strings
         """
-                # Tehdään pilkkominen vain jos pituus on oikein
+        # Tehdään pilkkominen vain jos pituus on oikein
         if self.checkSsnLengthOK(): # Jos True pilkotaan, huom self.metodinNimi
             dayPart = self.ssn[0:2]
             monthPart = self.ssn[2:4]
