@@ -7,30 +7,46 @@
 # MODUULIT
 # --------
 
-from avtools import sound # Äänimerkit ja äänitiedostot
-from avtools import video # Videomoduuli
+from avtools import sound  # Äänimerkit ja äänitiedostot
+from avtools import video  # Videomoduuli
 import identityCheck2
 
 # ASETUKSET
 # ---------
-kameraIndeksi: int = 1 # Ensimmäinen kamera on aina 0
+kameraIndeksi: int = 1  # Ensimmäinen kamera on aina 0
 
-# TODO: Pääohjelman ikuinen silmukka, josta poistutaan tarvittaessa (keksi mekanismi itse)
-# TODO: Paranna pääohjelmaa siten, että se ei kaadu, kun käyttäjä syöttää virheellisen henkilötunnuksen
-userGivenSsn = input('Syötä asiakkaan henkilötunnus: ')
-userGivenLastname = input('Syötä asiakkaan sukunimi')
-# TODO: Tee tarkistus siitä, että nimi ei voi olla tyhjä
-userGivenFirstname = input('Syötä asiakkaan etunimi')
-# TODO: Tee tarkistus siitä, että nimi ei voi olla tyhjä
-# TODO: Varaudu tilanteeseen, jossa hetu:n tarkiste on pienillä kirjaimilla
-# TODO: Muuta syötettyjen nimien akukirjain isoksi
+while True:
+    userGivenSsn = input('Syötä asiakkaan henkilötunnus: ')
+    userGivenSsn = userGivenSsn.upper()  # Varmistetaan, että  tarkiste on isolla
 
-ssnToCheck = identityCheck2.NationalSSN(userGivenSsn)
-if ssnToCheck.isValidSsn() == True:
-    dateOfBirth = ssnToCheck.getDateOfBirth()
-    ssnToCheck.getGender()
-    age = ssnToCheck.calculateAge()
-    print('Syntymäaika: ', ssnToCheck.getDateOfBirth)
-    print('Ikä: ', age)
-    print('Sukupuoli: ', ssnToCheck.gender)
-    
+    # TODO: Tee tarkistus siitä, että nimi ei voi olla tyhjä
+
+    # TODO: Rakenna funktio , jolla kysytään nimet ja muutetaan yhdysnimet isoile alkukirjaimille -> reg exp
+
+    ssnToCheck = identityCheck2.NationalSSN(userGivenSsn)
+    if ssnToCheck.isValidSsn() == True:
+        try:
+            dateOfBirth = ssnToCheck.getDateOfBirth()
+            ssnToCheck.getGender()
+            age = ssnToCheck.calculateAge()
+            userGivenLastname = input(
+                'Syötä asiakkaan sukunimi: ')  # Pyydetään sukunimeä
+            # Korjataan sukunimen ensimäinen kirjain isoksi kirjaimeksi
+            userGivenLastname = userGivenLastname.capitalize()
+            userGivenFirstname = input(
+                'Syötä asiakkaan etunimi: ')  # Pyydetään etunime
+            # Korjataan etuimen ensimäinen kirjain isoksi kirjaimeksi
+            userGivenFirstname = userGivenFirstname.capitalize()
+            print('Asiakas:', userGivenLastname, userGivenFirstname)
+            print('Syntymäaika: ', ssnToCheck.dateOfBirth)
+            print('Ikä: ', age)
+            print('Sukupuoli: ', ssnToCheck.gender)
+
+        except Exception as e:
+            print('Syöttämässäsi sosiaaliturvatunniksessa oli virhe', e)
+
+    # Kysytään halutaanko poistua ohjelmasta
+        wantAbort = input('Haluatko päättää ohjelman k/E: ')
+    # Muutetaan vastaus isoksi kirjaimeksi ja tarkitetaan onko vastaus K
+    if wantAbort.upper() == 'K':
+        break  # Poistutaan ikuisesta silmukasta

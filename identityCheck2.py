@@ -209,17 +209,18 @@ class NationalSSN:
 # ===================================================
 if __name__ == "__main__":
     try:
-        hetu1 = NationalSSN('130728-478N')
+        hetu1 = NationalSSN('130728x478N')
         hetu1.checkSsnLengthOK()
         hetu1.calculateAge()
         ika = hetu1.calculateAge()
         hetu1.getGender()
+        print('Oikein muodostettu:', hetu1.checkSsnLengthOK())
+        print('Henkilötunnus on oikein muodostettu', hetu1.isValidSsn())
+        print('HeTun osat ovat: ', hetu1.splitSsn())
+        print('Syntymäaikaosa ISO muodossa on', hetu1.dateOfBirth)
+        print('Henkilön ikä on', ika)
+        print('Ja hän on', hetu1.gender)
     except Exception as e:
         print('Tapahtui virhe', e)
 
-    print('Oikein muodostettu:', hetu1.checkSsnLengthOK())
-    print('Henkilötunnus on oikein muodostettu', hetu1.isValidSsn())
-    print('HeTun osat ovat: ', hetu1.splitSsn())
-    print('Syntymäaikaosa ISO muodossa on', hetu1.dateOfBirth)
-    print('Henkilön ikä on', ika)
-    print('Ja hän on', hetu1.gender)
+
