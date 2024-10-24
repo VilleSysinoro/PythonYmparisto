@@ -90,7 +90,7 @@ class NationalSSN:
             # Jos ssnLength on lyhyempi kuin 11
             else:
                 raise ValueError('Henkilötunnuksesta puuttuu merkkejä')
-            
+
         # Palautetaan True jos ssnLenght on oikeanpituinen
         return True
 
@@ -119,7 +119,7 @@ class NationalSSN:
         else:
             # TODO: Mieti pitäisikö generoida virheilmoitus (raise)
             return {'status': 'erro'}
-        
+
     # Selvitetään vamistussumman avulla onko HeTu syötetty oikein
     def isValidSsn(self) -> bool:
         """Recalculates the checksum of the SSN and verifies it is the same in the given SSN
@@ -154,7 +154,7 @@ class NationalSSN:
                 century = self.centyruCodes[centurySymbol]
             except:
                 raise ValueError('Vuosisatatamerkki virheellinen')
-            
+
             isoDate = century[0:2] + parts['years'] + \
                 '-' + parts['months'] + '-' + parts['days']
             self.dateOfBirth = isoDate
@@ -194,6 +194,7 @@ class NationalSSN:
                 self.gender = 'Nainen'
             else:
                 self.gender = 'Mies'
+
 
 # MAIN KOKEILUJA VARTEN (Poista kun ei enään tarvita)
 # ===================================================
