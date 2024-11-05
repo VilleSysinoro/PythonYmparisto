@@ -61,6 +61,11 @@ def createCode128B(text: str) -> str:
     checkSumSymbol = chr(checkSum + 32)
     code128BarcodeString = startChar + text + checkSumSymbol + stopChar
     return code128BarcodeString
+# LUOKKA VIIVAKOODEILLE
+# =====================
+
+class Viivakoodi:
+    pass
 
 if __name__ == "__main__":
     testString = '128B'
