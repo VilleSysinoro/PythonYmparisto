@@ -135,9 +135,9 @@
    <widget class="QPushButton" name="printPushButton">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>370</x>
       <y>200</y>
-      <width>91</width>
+      <width>131</width>
       <height>41</height>
      </rect>
     </property>
@@ -158,7 +158,7 @@
      <rect>
       <x>270</x>
       <y>200</y>
-      <width>111</width>
+      <width>81</width>
       <height>41</height>
      </rect>
     </property>
@@ -176,7 +176,7 @@
      <rect>
       <x>270</x>
       <y>180</y>
-      <width>81</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>

@@ -32,9 +32,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # ---------------------
         
         # Kun poistutaan ssnLineEdit-elementistä suoritetaan barcodeLabel-elementin päivitys
-        self.ui.ssnLineEdit.textEdited.connect(self.updateBarcodeLabel)
+        self.ui.ssnLineEdit.editingFinished.connect(self.updateBarcodeLabel)
 
-   
+        # TODO: Lisää alkukirjainten muuttaminen isoiksi etu- ja sukunimikenttiin
    
     # OHJELMOIDUT SLOTIT
     # ------------------
@@ -42,21 +42,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     # Viivakoodin muodostus ja barcodeLabel:n päivitys
     def updateBarcodeLabel(self):
         # Tarkistetaan, että henkilötunnus on oikein muodostettu
-        uiSsn = self.ui.ssnLineEdit.text() # Luetaan käyttöliittymästä henkilötunnus
+        uiSsn = self.ui.ssnLineEdit.text().upper() # Luetaan käyttöliittymästä henkilötunnus
         ssnToCheck = identityCheck2.NationalSSN(uiSsn) # Luodaan henkilötunnusobjekti
-        
+        # TODO: lisää tähän hetun muutos isoiksi kirjaimiksi ssnLineEdittiin
         # Jos se on oikein, luodaan viivakoodi
         if ssnToCheck.isValidSsn():
             barcode128 = barcode.Code128B(uiSsn) # Luodaan viivakoodi-olio
             barCodeToPrint = barcode128.buildBarcode() # Lisätään alku- ja loppumerkki sekä varmistussumma
             self.ui.barcodeLabel.setText(barCodeToPrint) # Päivitetään käyttöliittymän 
-        
-        
+    
         # Jos se muodostettu väärin näytetään virheilmoitus MessageBox-ikkunassa
-
-        self.errorTitle = 'Henkilötunnus virheellinen'
-        self.errorText = 'Syöttämässäsi henkilötunnuksessa on virhe'
-        self.openErrorMsgBox(self.errorTitle, self.errorText)
+        else:
+            self.errorTitle = 'Henkilötunnus virheellinen'
+            self.errorText = ssnToCheck.errorMessage
+            self.openErrorMsgBox(self.errorTitle, self.errorText)
     
     # Virheilmoitusikkuna
     def openErrorMsgBox(self, errorTitle, errorText):
@@ -69,8 +68,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
 
-    # Luodaan sovellus
+    # Luodaan sovellus, jossa on käyttöjärjestelmästä riippumaton ulkonäkö (Fusion)
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle('Fusion')
 
     # Luodaan objekti pääikkunalle ja tehdään siitä näkyvä
     window = MainWindow()

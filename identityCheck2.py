@@ -29,6 +29,8 @@ class NationalSSN:
         self.dateOfBirth = ''
         self.number = 0
         self.gender = ''
+        self.correctLenght = False
+        self.errorMessage = 'OK'
 
         # Sanakirjat vuosisatakoodeille ja varmisteille
         self.centuryCodes = {
@@ -84,9 +86,11 @@ class NationalSSN:
 
             # Generoidaan virhetilanne, jos liian lyhyt tai liian pitkä
             if ssnLength > 11:
-                raise ValueError('Henkilötunnuksessa ylimääräisiä merkkejä')
+                self.errorMessage = 'Henkilötunnuksessa ylimääräisiä merkkejä'
+                raise ValueError(self.errorMessage)
             else:
-                raise ValueError('Henkilötunnuksesta puuttuu merkkejä')
+                self.errorMessage = 'Henkilötunnuksesta puuttuu merkkejä'
+                raise ValueError(self.errorMessage)
             
         else:
             return True
@@ -115,6 +119,7 @@ class NationalSSN:
                     }
         # Else haaran tarkoitus on vain estää PyLance-virhe. Ei palauta oikeasti mitään, vaan antaa virheilmoituksen, jos HeTu väärän mittainen
         else:
+            self.errorMessage = 'Virhe henkilötunnuksessa'
             return {'status': 'error'}
 
     
@@ -127,7 +132,14 @@ class NationalSSN:
         Returns:
             bool: True if SSN is valid, False otherwise
         """
-        if self.checkSsnLengthOk:
+        
+        # Otetaan talteen mahdollinen virheilmoitus
+        try:
+            self.correctLenght = self.checkSsnLengthOk()
+        except Exception as e:
+            self.errorMessage = str(e)
+
+        if self.correctLenght == True:
             parts = self.splitSsn()
             moduloString = parts['days'] + parts['months'] + \
                 parts['years'] + parts['number']
@@ -137,6 +149,7 @@ class NationalSSN:
             if checkSumCalculatedSymbol == parts['checksum']:
                 return True
             else:
+                self.errorMessage = 'Syötetty henkilötunnus ei vastaa varmistussummaa'
                 return False
         else:
             return False
