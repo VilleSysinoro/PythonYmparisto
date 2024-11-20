@@ -27,6 +27,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Kutsutaan käyttöliittymän muodostusmetodia setupUi
         self.ui.setupUi(self)
+        self.ui.printPushButton.setEnabled(False)
 
         # OHJELMOIDUT SIGNAALIT
         # ---------------------
@@ -34,7 +35,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Kun poistutaan ssnLineEdit-elementistä suoritetaan barcodeLabel-elementin päivitys
         self.ui.ssnLineEdit.editingFinished.connect(self.updateBarcodeLabel)
 
-        # TODO: Lisää alkukirjainten muuttaminen isoiksi etu- ja sukunimikenttiin
+        # Siistitään etunimi- ja sukunimielementit poistuttaessa
+        self.ui.firstNameLineEdit.editingFinished.connect(self.beautifyFirstName)
+
+        # Signaali lähettää elementistä riippuen eri määrän argumentteja. Jos oma slot-metodi käyttää argumentteja, sen saama argumenttien määrä on todennäköisesti väärin. Tästä syystä käytetään välittäjämetodia, joka varsinaiselle metodille oikean määrän argumentteja. Metodi, jolla ei ole argumentteja hylkää saamansa argumentit tarpeettomina.
+
+        # Tehdään siistiminen välittäjämetodin interMediateSlot avulla:
+        #self.ui.lastNameLineEdit.editingFinished.connect(self.interMediateSlot)
+
+        # Jos ei halua kirjoittaa välittäjämetodia, voi käyttää anonyymiä funktiota eli lambdaa joka saa connect:n argumentit ja lähettää varsinaiselle metodille oikean määrän argumentteja:
+        self.ui.lastNameLineEdit.editingFinished.connect(lambda: self.beautifyElement(self.ui.lastNameLineEdit))
+        
+        
+        # Aktivoidaan tulostupainike sen jälkeen kun etikettien määrä on valittu
+        self.ui.amountSpinBox.valueChanged.connect(self.enablePrintButton)
    
     # OHJELMOIDUT SLOTIT
     # ------------------
@@ -44,7 +58,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Tarkistetaan, että henkilötunnus on oikein muodostettu
         uiSsn = self.ui.ssnLineEdit.text().upper() # Luetaan käyttöliittymästä henkilötunnus
         ssnToCheck = identityCheck2.NationalSSN(uiSsn) # Luodaan henkilötunnusobjekti
-        # TODO: lisää tähän hetun muutos isoiksi kirjaimiksi ssnLineEdittiin
+        self.ui.ssnLineEdit.setText(uiSsn) # Päivitetään myös syöttökenttä isoihin kirjaimiin
+
         # Jos se on oikein, luodaan viivakoodi
         if ssnToCheck.isValidSsn():
             barcode128 = barcode.Code128B(uiSsn) # Luodaan viivakoodi-olio
@@ -55,8 +70,43 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.errorTitle = 'Henkilötunnus virheellinen'
             self.errorText = ssnToCheck.errorMessage
+            self.ui.ssnLineEdit.setFocus()
             self.openErrorMsgBox(self.errorTitle, self.errorText)
     
+    # Siistitään etunimi muuttamalla alkukirjaimet isoiksi ja poistamalla ylim. välit
+    def beautifyFirstName(self):
+        elementText = self.ui.firstNameLineEdit.text()
+        elementText = elementText.strip() # Poistetaan ylimääräiset välit tms
+        elementText = elementText.title() # Muutetaan isot alkukirjaimet
+        self.ui.firstNameLineEdit.setText(elementText) # Päivitetään elementti
+
+    def beautifyLastName(self):
+        elementText = self.ui.lastNameLineEdit.text()
+        elementText = elementText.strip() # Poistetaan ylimääräiset välit tms
+        elementText = elementText.title() # Muutetaan isot alkukirjaimet
+        self.ui.lastNameLineEdit.setText(elementText) # Päivitetään elementti
+    
+    # Välittäjämetodi (agentti), joka ottaa vastaa signaalin ja sen mukana tulevat tiedot
+    def interMediateSlot(self):
+
+        # Asetetaan muokattava elementti ja kutsutaan varsinaista metodia, jolle annetaan täsmälleen 1 argumentti
+        element = self.ui.lastNameLineEdit
+        self.beautifyElement(element)
+
+
+    # Yleispätevä elementin siistimismetodi, varsinainen metodi, jota interMediateSlot kutsuu
+    def beautifyElement(self, element):
+        elementText = element.text()
+        elementText = elementText.strip()
+        elementText = elementText.title()
+        element.setText(elementText)
+    
+    # Aktivoidaan tulostuspainike
+    def enablePrintButton(self):
+        if self.ui.ssnLineEdit.text != '' or self.ui.firstNameLineEdit.text != '' or self.ui.lastNameLineEdit != '':
+            self.ui.printPushButton.setEnabled(True)
+
+
     # Virheilmoitusikkuna
     def openErrorMsgBox(self, errorTitle, errorText):
         msgBox = QtWidgets.QMessageBox()
@@ -66,6 +116,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msgBox.exec()
 
+    
+
+    # TODO: Tulostuspainike aktiiviseksi vain, kun kaikki tiedot syötetty ja OK -> disabled oletus, kun kaikki tiedot enable
+
+    # TODO: Lisää tilariville tiedot asiakkaasta tyyliin
+    # "Asiakas on 96 vuotias nainen"
 if __name__ == "__main__":
 
     # Luodaan sovellus, jossa on käyttöjärjestelmästä riippumaton ulkonäkö (Fusion)

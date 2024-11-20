@@ -61,6 +61,7 @@ class Ui_MainWindow(object):
         self.barcodeLabel.setFont(font1)
         self.printPushButton = QPushButton(self.centralwidget)
         self.printPushButton.setObjectName(u"printPushButton")
+        self.printPushButton.setEnabled(False)
         self.printPushButton.setGeometry(QRect(370, 200, 131, 41))
         font2 = QFont()
         font2.setPointSize(18)
