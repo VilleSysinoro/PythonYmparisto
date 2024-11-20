@@ -125,7 +125,6 @@ class NationalSSN:
     
 
     # Selvitetään varmistussumman avulla onko HeTu syötetty oikein
-
     def isValidSsn(self) -> bool:
         """Recalculates the checksum of the SSN and verifies it is the same in the given SSN
 
