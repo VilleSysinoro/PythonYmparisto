@@ -40,14 +40,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Jokaisella elementillä oma siistintämetodi
         self.ui.firstNameLineEdit.editingFinished.connect(self.beautifyFirstName)
 
-        """Signaali (connect) lähettää elementistä riippuen eri määrän argumentteja. Jos oma slot-metodi käyttää argumentteja, sen saama argumenttien määrä tai niiden tietotyypit ovat todennäköisesti väärin. Tästä syystä käytetään välittäjämetodia, joka lähettää varsinaiselle metodille oikean määrän argumentteja. Kun kutsutaan metodia, jolla ei ole argumentteja, ohjelma ei anna argumenttien tietotyyppi- tai määrävirhettä.
+        """Signaali (connect) lähettää elementistä riippuen eri määrän dataa.
+        Jos oma slot-metodi käyttää argumentteja, sen saama argumenttien määrä
+        tai niiden tietotyypit ovat todennäköisesti väärin. Tästä syystä käytetään
+        välittäjämetodia, joka lähettää varsinaiselle metodille oikean määrän argumentteja.
+        Kun kutsutaan metodia, jolla ei ole argumentteja, ohjelma ei anna argumenttien
+        tietotyyppi- tai määrävirhettä.
         """
 
         # Tehdään siistiminen välittäjämetodin interMediateSlot avulla:
         # self.ui.lastNameLineEdit.editingFinished.connect(self.interMediateSlot)
 
-        """ Jos ei halua kirjoittaa välittäjämetodia, voi käyttää anonyymiä funktiota eli lambdaa, joka saa connect:n lähettämän datan mutta lähettää varsinaiselle metodille oikean määrän argumentteja. Huomaa, että lambda pitää pystyä kirjoittamaan yhdelle riville, jolloin siinä ei voi olla ohjelmarakenteita mukana. Välittäjä metodissa niitä taas voidaan käyttää"""
-        
+        """ Jos ei halua kirjoittaa välittäjämetodia, voi käyttää anonyymiä funktiota
+        eli lambdaa, joka saa connect:n lähettämän datan, mutta lähettää varsinaiselle
+        metodille (beautifyElement) oikean määrän (1) argumentteja. Huomaa, että lambda
+        pitää pystyä kirjoittamaan yhdelle riville, jolloin siinä ei voi olla 
+        ohjelmarakenteita mukana. Välittäjä metodissa niitä taas voidaan käyttää."""
+
         self.ui.lastNameLineEdit.editingFinished.connect(lambda: self.beautifyElement(self.ui.lastNameLineEdit))
         
         
