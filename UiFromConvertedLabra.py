@@ -38,12 +38,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Siistitään etunimi- ja sukunimielementit poistuttaessa
         self.ui.firstNameLineEdit.editingFinished.connect(self.beautifyFirstName)
 
-        # Signaali lähettää elementistä riippuen eri määrän argumentteja. Jos oma slot-metodi käyttää argumentteja, sen saama argumenttien määrä on todennäköisesti väärin. Tästä syystä käytetään välittäjämetodia, joka varsinaiselle metodille oikean määrän argumentteja. Metodi, jolla ei ole argumentteja hylkää saamansa argumentit tarpeettomina.
+        """Signaali (connect) lähettää elementistä riippuen eri määrän argumentteja. Jos oma slot-metodi käyttää argumentteja, sen saama argumenttien määrä on todennäköisesti väärin. Tästä syystä käytetään välittäjämetodia, joka lähettää varsinaiselle metodille oikean määrän argumentteja. Kun kutsutaan metodia, jolla ei ole argumentteja, metodi hylkää signaalilta saamansa argumentit tarpeettomina.
+        """
 
         # Tehdään siistiminen välittäjämetodin interMediateSlot avulla:
         #self.ui.lastNameLineEdit.editingFinished.connect(self.interMediateSlot)
 
-        # Jos ei halua kirjoittaa välittäjämetodia, voi käyttää anonyymiä funktiota eli lambdaa joka saa connect:n argumentit ja lähettää varsinaiselle metodille oikean määrän argumentteja:
+        """ Jos ei halua kirjoittaa välittäjämetodia, voi käyttää anonyymiä funktiota eli lambdaa, joka saa connect:n argumentit ja lähettää varsinaiselle metodille oikean määrän argumentteja:"""
         self.ui.lastNameLineEdit.editingFinished.connect(lambda: self.beautifyElement(self.ui.lastNameLineEdit))
         
         
@@ -115,10 +116,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         msgBox.setText(errorText)
         msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msgBox.exec()
-
-    
-
-    # TODO: Tulostuspainike aktiiviseksi vain, kun kaikki tiedot syötetty ja OK -> disabled oletus, kun kaikki tiedot enable
 
     # TODO: Lisää tilariville tiedot asiakkaasta tyyliin
     # "Asiakas on 96 vuotias nainen"
