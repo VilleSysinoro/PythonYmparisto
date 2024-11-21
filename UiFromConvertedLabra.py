@@ -44,9 +44,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
    
     # OHJELMOIDUT SLOTIT
     # ------------------
-    # TODO: Tee DocStringit metodeille
+    #
     # Viivakoodin muodostus ja barcodeLabel:n päivitys
     def updateBarcodeLabel(self):
+        """Updates the barcode label and sets ssnLineEdit to upper case
+        """
         # Tarkistetaan, että henkilötunnus on oikein muodostettu
         uiSsn = self.ui.ssnLineEdit.text().upper() # Luetaan käyttöliittymästä henkilötunnus
         ssnToCheck = identityCheck2.NationalSSN(uiSsn) # Luodaan henkilötunnusobjekti
@@ -69,9 +71,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.errorText = ssnToCheck.errorMessage
             self.openErrorMsgBox(self.errorTitle, self.errorText)
             self.ui.ssnLineEdit.setFocus() # Palautetaan kursori takaisin elementtiin
-            
+
     # Yleispätevä elementin siistimismetodi, varsinainen metodi, jota interMediateSlot tai lambda kutsuu
     def beautifyElement(self, element):
+        """Beautifies contents of an element
+
+        Args:
+            element (QtWidget): The element to be beautified
+        """
         elementText = element.text() # Luetaan elementin teksti
         elementText = elementText.strip() # Poistetaan välit alusta ja lopusta
         elementText = elementText.title() # Muutetaan isot alkukirjaimet
@@ -79,12 +86,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     # Aktivoidaan tulostuspainike
     def enablePrintButton(self):
+        """Enables the print button if all inputs are occupied with values
+        """
         if self.ui.ssnLineEdit.text != '' or self.ui.firstNameLineEdit.text != '' or self.ui.lastNameLineEdit != '':
             self.ui.printPushButton.setEnabled(True)
 
 
     # Virheilmoitusikkuna
     def openErrorMsgBox(self, errorTitle, errorText):
+        """Opens a message box alerting about an error
+
+        Args:
+            errorTitle (str): Title of the message box
+            errorText (str): What kind of an error has occured
+        """
         msgBox = QtWidgets.QMessageBox()
         msgBox.setIcon(QtWidgets.QMessageBox.Critical)
         msgBox.setWindowTitle(errorTitle)
@@ -92,10 +107,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msgBox.exec()
 
-    # TODO: Lisää tilariville tiedot asiakkaasta tyyliin
+    # Tilarivinpäivitysrutiini
     def updateStatusbar(self, textToShow, timeToShow = -1):
+        """Updates the statusbar
+
+        Args:
+            textToShow (str): A text to show on statusbar
+            timeToShow (int, optional): duration of message in ms. Defaults to -1.
+        """
         self.ui.statusbar.showMessage(textToShow, timeToShow)
-    # "Asiakas on 96 vuotias nainen"
+    
 if __name__ == "__main__":
 
     # Luodaan sovellus, jossa on käyttöjärjestelmästä riippumaton ulkonäkö (Fusion)
